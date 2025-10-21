@@ -96,7 +96,7 @@ const Hero = () => {
         {/* Social Links */}
         <motion.div className="flex items-center justify-center gap-6" variants={itemVariants}>
           <a
-            href="https://linkedin.com/in/shivpujan"
+            href="https://www.linkedin.com/in/shivpujan-kumar-329a54266"
             target="_blank"
             rel="noopener noreferrer"
             className="group p-3 rounded-lg bg-gray-800/50 hover:bg-teal-500 transition-colors duration-300"
@@ -111,7 +111,7 @@ const Hero = () => {
             </svg>
           </a>
           <a
-            href="https://github.com/shivpujan"
+            href="https://github.com/preetampatel9478"
             target="_blank"
             rel="noopener noreferrer"
             className="group p-3 rounded-lg bg-gray-800/50 hover:bg-teal-500 transition-colors duration-300"
@@ -126,7 +126,7 @@ const Hero = () => {
             </svg>
           </a>
           <a
-            href="https://twitter.com/shivpujan"
+            href="https://twitter.com/Preetam94785232"
             target="_blank"
             rel="noopener noreferrer"
             className="group p-3 rounded-lg bg-gray-800/50 hover:bg-teal-500 transition-colors duration-300"

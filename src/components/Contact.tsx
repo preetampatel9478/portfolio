@@ -95,17 +95,26 @@ const Contact = () => {
               {
                 icon: '✉️',
                 label: 'Email',
+                value: 'shivpujankumar02002@gmail.com',
                 link: 'mailto:shivpujankumar02002@gmail.com',
               },
               {
                 icon: '💼',
                 label: 'LinkedIn',
+                value: 'linkedin.com/in/shivpujan-kumar',
                 link: 'https://www.linkedin.com/in/shivpujan-kumar-329a54266',
               },
               {
                 icon: '🔗',
                 label: 'GitHub',
+                value: 'github.com/preetampatel9478',
                 link: 'https://github.com/preetampatel9478',
+              },
+              {
+                icon: '𝕏',
+                label: 'Twitter',
+                value: '@Preetam94785232',
+                link: 'https://twitter.com/Preetam94785232',
               },
             ].map((contact, idx) => (
               <motion.a
@@ -122,7 +131,7 @@ const Contact = () => {
                     {contact.label}
                   </h3>
                   <p className="text-teal-400 hover:text-teal-300 transition-colors">
-                    {contact.value}
+                    {contact.value || contact.link.replace('mailto:', '').replace('https://', '')}
                   </p>
                 </div>
               </motion.a>
