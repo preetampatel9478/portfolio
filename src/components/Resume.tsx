@@ -32,9 +32,8 @@ const Resume = () => {
     {
       title: 'Full Resume',
       description: 'Complete professional resume with full work history and achievements',
-      fileSize: '250 KB',
       format: 'PDF',
-      downloadUrl: '/resume/Shivpujan_Kumar_Resume.pdf',
+      downloadUrl: 'G:\\portfolio\\portfolio\\src\\components\\shiv (3).pdf',
     },
     {
       title: 'CV (Curriculum Vitae)',
