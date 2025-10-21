@@ -53,6 +53,12 @@ const Projects = () => {
       tags: ['Next.js', 'WebSockets', 'Yjs', 'PostgreSQL', 'Redis'],
       link: '#',
     },
+    {
+      title: 'DeployProbe',
+      description: 'Flask-based platform for load testing deployed projects. Simulates real-world traffic with concurrent requests to evaluate performance, response quality, and capacity limits. Generates comprehensive performance reports.',
+      tags: ['Flask', 'Python', 'Load Testing', 'Bootstrap', 'ReportLab'],
+      link: 'https://github.com/preetampatel9478/DeployProbe',
+    },
   ]
 
   const containerVariants = {
