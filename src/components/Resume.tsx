@@ -32,22 +32,26 @@ const Resume = () => {
     {
       title: 'Full Resume',
       description: 'Complete professional resume with full work history and achievements',
+      fileSize: '250 KB',
       format: 'PDF',
-      downloadUrl: 'G:\\portfolio\\portfolio\\src\\components\\shiv (3).pdf',
+      downloadUrl: '/resumes/Shivpujan_Kumar_Resume.pdf',
+      fileName: 'Shivpujan_Kumar_Resume.pdf',
     },
     {
       title: 'CV (Curriculum Vitae)',
       description: 'Detailed curriculum vitae for academic and research positions',
       fileSize: '280 KB',
       format: 'PDF',
-      downloadUrl: '/resume/Shivpujan_Kumar_CV.pdf',
+      downloadUrl: '/resumes/Shivpujan_Kumar_CV.pdf',
+      fileName: 'Shivpujan_Kumar_CV.pdf',
     },
     {
       title: 'Technical Resume',
       description: 'Specialized resume highlighting technical skills and projects',
       fileSize: '200 KB',
       format: 'PDF',
-      downloadUrl: '/resume/Shivpujan_Kumar_Technical_Resume.pdf',
+      downloadUrl: '/resumes/Shivpujan_Kumar_Technical_Resume.pdf',
+      fileName: 'Shivpujan_Kumar_Technical_Resume.pdf',
     },
   ]
 
@@ -106,7 +110,7 @@ const Resume = () => {
                   {/* Download Button */}
                   <motion.a
                     href={resume.downloadUrl}
-                    download
+                    download={resume.fileName}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className="w-full px-4 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-gray-900 font-semibold rounded-lg hover:from-teal-400 hover:to-teal-500 transition-all duration-300 flex items-center justify-center gap-2 group"

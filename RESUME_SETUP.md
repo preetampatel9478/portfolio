@@ -1,22 +1,25 @@
-# 📄 Resume Upload & Management Guide
+# 📄 Resume Upload & Management Guide - FIXED! ✅
 
-## 🎯 Overview
+## 🎯 What's Fixed
 
-Your portfolio now includes a dedicated **Resume & Documents** section where visitors can:
-- View your professional summary
-- Download multiple resume formats
-- See your experience and certifications
+The resume download feature is **now fully working on localhost!** ✅
+
+### Issues Fixed:
+- ❌ **Before**: Windows absolute paths didn't work in browser
+- ✅ **After**: Proper web-accessible paths (`/resumes/filename.pdf`)
+- ✅ **Download**: Now works on localhost & production
+- ✅ **Build**: Successful compilation verified
 
 ---
 
-## 📁 File Structure
+## 📁 File Structure (CORRECT)
 
 ```
 public/
-├── resume/
-│   ├── Shivpujan_Kumar_Resume.pdf        ← Add your main resume (1-2 pages)
-│   ├── Shivpujan_Kumar_CV.pdf            ← Add your full CV (2-3 pages)
-│   └── Shivpujan_Kumar_Technical_Resume.pdf ← Add technical resume (1 page)
+├── resumes/                          ← Correct location (plural)
+│   ├── Shivpujan_Kumar_Resume.pdf    ✅ (Your PDF - already added)
+│   ├── Shivpujan_Kumar_CV.pdf        (Add when ready)
+│   └── Shivpujan_Kumar_Technical_Resume.pdf (Add when ready)
 ```
 
 ---
@@ -27,22 +30,23 @@ public/
 1. Create or update your resume in Word, Google Docs, or any editor
 2. Export/Save as PDF format
 3. Name the files exactly as shown:
-   - `Shivpujan_Kumar_Resume.pdf`
+   - `Shivpujan_Kumar_Resume.pdf` ← Already added ✅
    - `Shivpujan_Kumar_CV.pdf`
    - `Shivpujan_Kumar_Technical_Resume.pdf`
 
-### Step 2: Upload to Portfolio
-1. Navigate to: `g:\portfolio\portfolio\public\resume\`
+### Step 2: Upload to Portfolio (IMPORTANT - Correct Location!)
+1. Navigate to: `g:\portfolio\portfolio\public\resumes\` ← Note: `resumes` (plural)
 2. Copy your PDF files into this folder
 3. Make sure filenames match exactly (case-sensitive on some servers)
 
-### Step 3: Test Locally
+### Step 3: Test Locally ← THIS NOW WORKS!
 ```bash
 npm run dev
 ```
 - Visit `http://localhost:3000`
 - Scroll to "Resume & Documents" section
-- Click download buttons to verify files work
+- Click download buttons ← They now work! ✅
+- Files should download automatically
 
 ### Step 4: Deploy
 ```bash
@@ -52,7 +56,38 @@ npm start
 
 ---
 
-## 📄 Customizing Resume Section
+## � What Changed (Technical Details)
+
+### Fixed Download URLs
+```typescript
+// ❌ BEFORE (Didn't work)
+downloadUrl: 'G:\\portfolio\\portfolio\\src\\components\\shiv (3).pdf'
+
+// ✅ AFTER (Works perfectly!)
+downloadUrl: '/resumes/Shivpujan_Kumar_Resume.pdf'
+```
+
+### Download Implementation
+```typescript
+<a
+  href={resume.downloadUrl}      // e.g., '/resumes/Resume.pdf'
+  download={resume.fileName}     // e.g., 'Shivpujan_Kumar_Resume.pdf'
+  className="..."
+>
+  Download
+</a>
+```
+
+### Why It Works Now
+1. ✅ Files in `public/` directory (web-accessible)
+2. ✅ Correct URL paths (`/resumes/filename.pdf`)
+3. ✅ Download attribute with filename specified
+4. ✅ No absolute Windows paths
+5. ✅ Works on localhost AND production
+
+---
+
+## �📄 Customizing Resume Section
 
 ### Change Resume File Names
 
@@ -62,12 +97,12 @@ Edit `src/components/Resume.tsx` and update the `resumeFiles` array:
 const resumeFiles = [
   {
     title: 'Full Resume',
-    description: 'Complete professional resume with full work history and achievements',
+    description: 'Complete professional resume...',
     fileSize: '250 KB',
     format: 'PDF',
-    downloadUrl: '/resume/YOUR_FILENAME.pdf',  // ← Change this
+    downloadUrl: '/resumes/Shivpujan_Kumar_Resume.pdf',  // ← Correct path
+    fileName: 'Shivpujan_Kumar_Resume.pdf',  // ← Download filename
   },
-  // ... more files
 ]
 ```
 
@@ -205,23 +240,34 @@ https://yourportfolio.com/resume/Shivpujan_Kumar_Technical_Resume.pdf
 ## 🆘 Troubleshooting
 
 ### Problem: Download button doesn't work
+**Solution (FIXED!)**: 
+- ✅ Use correct path: `/resumes/filename.pdf` (NOT Windows path)
+- ✅ Files must be in `public/resumes/` folder
+- ✅ Verify filename matches exactly
+- ✅ Ensure file is a valid PDF
+- ✅ Clear browser cache and retry
+
+### Problem: "localhost said: 404 Not Found"
 **Solution**: 
-1. Check file exists in `public/resume/` folder
-2. Verify filename matches exactly (including capitalization)
-3. Ensure file is a valid PDF
+1. Check file exists: `g:\portfolio\portfolio\public\resumes\Shivpujan_Kumar_Resume.pdf`
+2. Verify folder is `resumes` (plural) not `resume`
+3. Restart dev server: `npm run dev`
+4. Clear `.next` folder: `Remove-Item .next -Recurse -Force`
 
 ### Problem: File size shows wrong
 **Solution**: 
 Update the `fileSize` in the `resumeFiles` array:
 ```typescript
-fileSize: '250 KB',  // Update this to actual size
+fileSize: '250 KB',  // Update to actual size
 ```
 
-### Problem: Can't access on mobile
+### Problem: Downloads but opens in browser instead
 **Solution**:
-1. PDFs work on mobile browsers
-2. Some PDFs may open in browser instead of downloading
-3. Add `download` attribute to link (already included)
+This is normal for PDFs. The `download` attribute is set:
+```typescript
+download={resume.fileName}  // Forces download
+```
+Users can still save manually if they prefer.
 
 ---
 
