@@ -8,6 +8,7 @@ interface Startup {
   description: string
   status: string
   details: string[]
+  website?: string
 }
 
 const Startups = () => {
@@ -18,22 +19,24 @@ const Startups = () => {
 
   const startupData: Startup[] = [
     {
-      name: 'DataFlow Analytics',
-      description: 'AI-powered data analytics platform for businesses to extract insights from unstructured data.',
+      name: 'HeyApnaGhr',
+      description: 'AI-powered housing and PG discovery platform that helps students and working professionals find rooms, PGs, hostels, and compatible roommates using smart matching algorithms.',
       status: 'Active',
-      details: ['B2B SaaS', 'Series A Funded', '50+ Enterprise Clients'],
+      website: 'https://apanaghr.in',
+      details: ['B2C + B2B Platform', 'Early-Stage Startup', 'AI Roommate Matching', 'End-to-End Discovery'],
     },
     {
-      name: 'CodementorPro',
-      description: 'Platform connecting junior developers with experienced mentors for personalized learning and career guidance.',
+      name: 'Fasal Seva',
+      description: 'AI-powered smart farming platform that helps farmers make data-driven decisions using satellite data, IoT sensors, and intelligent crop advisory systems.',
       status: 'Active',
-      details: ['EdTech', 'Community of 10K+', 'Bootstrapped'],
+      website: 'https://fasalseva.app',
+      details: ['AgriTech Platform (B2C + B2B)', 'Early-Stage Product', 'AI-based Crop Recommendations', 'Multi-language Support'],
     },
     {
-      name: 'CloudGuard Solutions',
-      description: 'Cybersecurity SaaS providing real-time threat detection and vulnerability management for small businesses.',
+      name: 'Stock Connect',
+      description: 'Social media platform focused on stock market news, discussions, and insights, enabling users to share opinions, analyze trends, and engage with a finance-focused community.',
       status: 'In Development',
-      details: ['Cybersecurity', 'Pre-Launch', 'Seeking Investors'],
+      details: ['FinTech / Social Platform (B2C)', 'Early-Stage Product', 'Stock Market Discussions', 'Community Insights'],
     },
   ]
 
@@ -80,7 +83,7 @@ const Startups = () => {
               <motion.div key={idx} variants={itemVariants}>
                 <div className="bg-gray-800/50 rounded-lg p-6 md:p-8 border border-teal-400/20 hover:border-teal-400/60 transition-colors">
                   <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-                    <div>
+                    <div className="flex-grow">
                       <h3 className="text-2xl font-bold text-white mb-2">
                         {startup.name}
                       </h3>
@@ -88,7 +91,7 @@ const Startups = () => {
                         {startup.description}
                       </p>
                     </div>
-                    <div className="flex-shrink-0">
+                    <div className="flex flex-col gap-2 flex-shrink-0">
                       <span
                         className={`inline-block px-4 py-2 rounded-full font-semibold text-sm ${
                           startup.status === 'Active'
@@ -98,6 +101,29 @@ const Startups = () => {
                       >
                         {startup.status}
                       </span>
+                      {startup.website && (
+                        <a
+                          href={startup.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-teal-500/20 text-teal-400 border border-teal-400/30 rounded-lg hover:bg-teal-500/30 hover:border-teal-400/60 transition-all font-semibold text-sm"
+                        >
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                            />
+                          </svg>
+                          Visit Website
+                        </a>
+                      )}
                     </div>
                   </div>
 
@@ -121,22 +147,31 @@ const Startups = () => {
 
           {/* Impact Stats */}
           <motion.div
-            className="mt-16 grid md:grid-cols-4 gap-4"
+            className="mt-16 grid md:grid-cols-3 gap-6"
             variants={containerVariants}
           >
             {[
-              { label: 'Total Funding Raised', value: '$2.5M+' },
-              { label: 'Active Customers', value: '10K+' },
-              { label: 'Team Members', value: '50+' },
-              { label: 'Years Experience', value: '7+' },
+              { label: 'Bootstrapped', value: '✓', icon: '💰' },
+              { label: 'Active Users', value: '500+', icon: '👥' },
+              { label: 'Team Members', value: '3', icon: '🚀' },
+              { label: 'Years of Experience', value: '2+', icon: '⏱️' },
             ].map((stat, idx) => (
               <motion.div
                 key={idx}
                 variants={itemVariants}
-                className="bg-gradient-to-br from-teal-500/10 to-blue-500/10 rounded-lg p-6 border border-teal-400/20 text-center"
+                className="group relative bg-gradient-to-br from-teal-500/15 to-blue-500/10 rounded-lg p-8 border border-teal-400/30 hover:border-teal-400/60 transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/10 overflow-hidden"
               >
-                <p className="text-gray-400 text-sm mb-2">{stat.label}</p>
-                <p className="text-3xl font-bold text-teal-400">{stat.value}</p>
+                {/* Background gradient effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-teal-500/0 via-teal-500/5 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                
+                {/* Content */}
+                <div className="relative z-10 flex flex-col items-center gap-3">
+                  <span className="text-4xl">{stat.icon}</span>
+                  <p className="text-gray-400 text-sm font-medium text-center">{stat.label}</p>
+                  <p className="text-4xl font-bold bg-gradient-to-r from-teal-400 to-blue-400 bg-clip-text text-transparent">
+                    {stat.value}
+                  </p>
+                </div>
               </motion.div>
             ))}
           </motion.div>

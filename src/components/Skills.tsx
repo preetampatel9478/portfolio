@@ -20,11 +20,11 @@ const Skills = () => {
     },
     {
       name: 'Databases',
-      skills: ['PostgreSQL', 'MongoDB', 'Redis', 'Firebase', 'Prisma', 'Supabase'],
+      skills: ['PostgreSQL', 'MongoDB' , 'Firebase', 'NoSQL', 'Supabase'],
     },
     {
       name: 'AI/ML Tools',
-      skills: ['TensorFlow', 'PyTorch', 'YOLOv8', 'OpenAI API', 'LangChain', 'Hugging Face'],
+      skills: ['TensorFlow', 'PyTorch', 'YOLOv8', 'OpenAI API', 'LangChain', 'Hugging Face', 'TensorFlow'],
     },
   ]
 
@@ -99,8 +99,8 @@ const Skills = () => {
           >
             {[
               { label: 'Deployment', value: 'AWS, Vercel, Docker' },
-              { label: 'Version Control', value: 'Git, GitHub, GitLab' },
-              { label: 'Tools', value: 'VS Code, Figma, Postman' },
+              { label: 'Version Control', value: 'Git, GitHub' },
+              { label: 'Tools', value: 'VS Code, Figma, Postman, Canva' },
               { label: 'Methodologies', value: 'Agile, REST, GraphQL' },
             ].map((item, idx) => (
               <motion.div

@@ -1,10 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import emailjs from '@emailjs/browser'
 
 const Contact = () => {
+  // Initialize EmailJS
+  useEffect(() => {
+    emailjs.init('YOUR_PUBLIC_KEY_HERE') // Replace with your public key
+  }, [])
   const { ref, inView } = useInView({
     threshold: 0.2,
     triggerOnce: true,
@@ -18,6 +23,8 @@ const Contact = () => {
   })
 
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -31,15 +38,39 @@ const Contact = () => {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // In production, send form data to your backend
-    console.log('Form submitted:', formData)
-    setSubmitted(true)
-    setTimeout(() => {
-      setSubmitted(false)
+    setLoading(true)
+    setError('')
+
+    try {
+      // Send email using EmailJS
+      await emailjs.send(
+        'service_v6hj7a8', // Your Service ID
+        'template_oaq3i0u', // Your Template ID
+        {
+          to_email: 'shivpujankumar02002@gmail.com',
+          from_name: formData.name,
+          from_email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        }
+      )
+
+      setSubmitted(true)
       setFormData({ name: '', email: '', subject: '', message: '' })
-    }, 3000)
+      setTimeout(() => {
+        setSubmitted(false)
+      }, 3000)
+    } catch (err) {
+      console.error('Error sending email:', err)
+      setError('Failed to send message. Please try again.')
+      setTimeout(() => {
+        setError('')
+      }, 3000)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const containerVariants = {
@@ -86,58 +117,6 @@ const Contact = () => {
             <div className="w-20 h-1 bg-gradient-to-r from-teal-400 to-blue-400 mx-auto mt-4" />
           </motion.div>
 
-          {/* Contact Info Cards */}
-          <motion.div
-            className="grid md:grid-cols-3 gap-6 mb-12"
-            variants={containerVariants}
-          >
-            {[
-              {
-                icon: '✉️',
-                label: 'Email',
-                value: 'shivpujankumar02002@gmail.com',
-                link: 'mailto:shivpujankumar02002@gmail.com',
-              },
-              {
-                icon: '💼',
-                label: 'LinkedIn',
-                value: 'linkedin.com/in/shivpujan-kumar',
-                link: 'https://www.linkedin.com/in/shivpujan-kumar-329a54266',
-              },
-              {
-                icon: '🔗',
-                label: 'GitHub',
-                value: 'github.com/preetampatel9478',
-                link: 'https://github.com/preetampatel9478',
-              },
-              {
-                icon: '𝕏',
-                label: 'Twitter',
-                value: '@Preetam94785232',
-                link: 'https://twitter.com/Preetam94785232',
-              },
-            ].map((contact, idx) => (
-              <motion.a
-                key={idx}
-                href={contact.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                variants={itemVariants}
-                whileHover={{ y: -5 }}
-              >
-                <div className="bg-gray-900/50 border border-teal-400/20 rounded-lg p-6 hover:border-teal-400/60 transition-all duration-300 text-center">
-                  <div className="text-3xl mb-3">{contact.icon}</div>
-                  <h3 className="text-lg font-semibold text-white mb-2">
-                    {contact.label}
-                  </h3>
-                  <p className="text-teal-400 hover:text-teal-300 transition-colors">
-                    {contact.value || contact.link.replace('mailto:', '').replace('https://', '')}
-                  </p>
-                </div>
-              </motion.a>
-            ))}
-          </motion.div>
-
           {/* Contact Form */}
           <motion.form
             onSubmit={handleSubmit}
@@ -148,9 +127,25 @@ const Contact = () => {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-6 p-4 bg-green-500/20 border border-green-400/30 rounded-lg text-green-400"
+                className="mb-6 p-4 bg-green-500/20 border border-green-400/30 rounded-lg text-green-400 flex items-center gap-2"
               >
-                ✓ Thank you! I'll get back to you soon.
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>✓ Thank you! Your message has been sent successfully. I'll get back to you soon.</span>
+              </motion.div>
+            )}
+
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-6 p-4 bg-red-500/20 border border-red-400/30 rounded-lg text-red-400 flex items-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+                <span>{error}</span>
               </motion.div>
             )}
 
@@ -237,11 +232,31 @@ const Contact = () => {
             {/* Submit Button */}
             <motion.button
               type="submit"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full px-6 py-3 bg-teal-500 text-gray-900 font-semibold rounded-lg hover:bg-teal-400 transition-colors shadow-lg hover:shadow-teal-500/50"
+              disabled={loading}
+              whileHover={{ scale: loading ? 1 : 1.02 }}
+              whileTap={{ scale: loading ? 1 : 0.98 }}
+              className={`w-full px-6 py-3 font-semibold rounded-lg transition-all duration-300 shadow-lg flex items-center justify-center gap-2 ${
+                loading
+                  ? 'bg-teal-500/50 text-gray-900 cursor-not-allowed'
+                  : 'bg-teal-500 text-gray-900 hover:bg-teal-400 hover:shadow-teal-500/50'
+              }`}
             >
-              Send Message
+              {loading ? (
+                <>
+                  <svg className="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  Sending...
+                </>
+              ) : (
+                <>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  Send Message
+                </>
+              )}
             </motion.button>
           </motion.form>
 

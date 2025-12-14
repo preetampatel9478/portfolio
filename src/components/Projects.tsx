@@ -18,39 +18,15 @@ const Projects = () => {
 
   const projectData: Project[] = [
     {
-      title: 'AI Vision Analytics Platform',
-      description: 'Real-time object detection and tracking system using YOLOv8. Built with Python, FastAPI, and React for analyzing video streams and generating insights.',
-      tags: ['Python', 'YOLOv8', 'FastAPI', 'React', 'PostgreSQL'],
+      title: 'Video Ergonomics – Human Body Posture Analysis',
+      description: 'AI-based system that analyzes human body posture from video input to detect ergonomic risks and unsafe movements. Helps identify posture-related health risks in workplaces for safety monitoring.',
+      tags: ['Python', 'OpenCV', 'MediaPipe', 'Machine Learning', 'Video Analysis'],
       link: '#',
     },
     {
-      title: 'E-Commerce Platform',
-      description: 'Full-stack e-commerce solution with product management, payment integration, and real-time inventory tracking. Deployed on AWS with serverless architecture.',
-      tags: ['Next.js', 'Node.js', 'Stripe', 'AWS', 'MongoDB'],
-      link: '#',
-    },
-    {
-      title: 'SaaS Analytics Dashboard',
-      description: 'Comprehensive analytics dashboard for tracking user metrics, revenue, and engagement. Features real-time data updates and custom report generation.',
-      tags: ['React', 'TypeScript', 'D3.js', 'Firebase', 'Tailwind CSS'],
-      link: '#',
-    },
-    {
-      title: 'AI Chat Application',
-      description: 'ChatGPT-like application built with OpenAI API, featuring conversation history, context switching, and prompt optimization for various use cases.',
-      tags: ['Next.js', 'OpenAI API', 'LangChain', 'Pinecone', 'PostgreSQL'],
-      link: '#',
-    },
-    {
-      title: 'Blockchain Asset Manager',
-      description: 'Decentralized asset management system with smart contract integration. Track, trade, and manage digital assets on Ethereum blockchain.',
-      tags: ['Solidity', 'Web3.js', 'React', 'Ethers.js', 'Hardhat'],
-      link: '#',
-    },
-    {
-      title: 'Real-time Collaboration Tool',
-      description: 'Document collaboration platform with live editing, commenting, and version control. Built with WebSockets for real-time synchronization.',
-      tags: ['Next.js', 'WebSockets', 'Yjs', 'PostgreSQL', 'Redis'],
+      title: 'AI Vehicle Number Plate Detection & Recognition',
+      description: 'Real-time system for detecting vehicles, recognizing number plates, and extracting vehicle details using deep learning. Features accurate detection, real-time processing with speed estimation, and secure database storage.',
+      tags: ['Python', 'YOLOv8', 'OpenCV', 'MySQL', 'Google Gemini AI'],
       link: '#',
     },
     {
@@ -58,6 +34,18 @@ const Projects = () => {
       description: 'Flask-based platform for load testing deployed projects. Simulates real-world traffic with concurrent requests to evaluate performance, response quality, and capacity limits. Generates comprehensive performance reports.',
       tags: ['Flask', 'Python', 'Load Testing', 'Bootstrap', 'ReportLab'],
       link: 'https://github.com/preetampatel9478/DeployProbe',
+    },
+    {
+      title: 'Live Weather & Temperature App',
+      description: 'Web application that displays real-time weather data based on user location. Features current temperature, weather conditions, and location-based forecasts with a clean, intuitive user interface.',
+      tags: ['HTML', 'CSS', 'JavaScript', 'Weather API'],
+      link: '#',
+    },
+    {
+      title: 'Student Freelancing Platform',
+      description: 'Task-based platform where college students can post and complete paid projects securely. Connects students with opportunities to earn while gaining practical experience.',
+      tags: ['React', 'Node.js', 'Firebase'],
+      link: '#',
     },
   ]
 
@@ -96,7 +84,7 @@ const Projects = () => {
           <motion.div className="text-center mb-12" variants={itemVariants}>
             <h2 className="text-4xl sm:text-5xl font-bold mb-4">
               <span className="bg-gradient-to-r from-teal-400 to-blue-400 bg-clip-text text-transparent">
-                Featured Projects
+                My Projects
               </span>
             </h2>
             <div className="w-20 h-1 bg-gradient-to-r from-teal-400 to-blue-400 mx-auto" />
