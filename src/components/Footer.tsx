@@ -1,13 +1,82 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import emailjs from '@emailjs/browser'
 
 const Footer = () => {
+  // Initialize EmailJS
+  useEffect(() => {
+    emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || '0fh290fG-PvuUuzSY')
+  }, [])
+
   const { ref, inView } = useInView({
     threshold: 0.2,
     triggerOnce: true,
   })
+
+  // Form state
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  })
+
+  const [loading, setLoading] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const handleFormChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setLoading(true)
+    setErrorMessage('')
+
+    try {
+      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'service_v6hj7a8'
+      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'template_oaq3i0u'
+
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          to_email: 'shivpujankumar02002@gmail.com',
+          from_name: formData.name,
+          from_email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          reply_to: formData.email,
+        }
+      )
+
+      setSuccessMessage('✅ Your message sent successfully!')
+      setFormData({ name: '', email: '', subject: '', message: '' })
+
+      setTimeout(() => {
+        setSuccessMessage('')
+      }, 4000)
+    } catch (err: any) {
+      console.error('Error sending email:', err)
+      setErrorMessage('❌ Failed to send message. Please try again.')
+
+      setTimeout(() => {
+        setErrorMessage('')
+      }, 4000)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -28,60 +97,46 @@ const Footer = () => {
     },
   }
 
+  const handleCertificationClick = (pdfPath: string) => {
+    window.open(pdfPath, '_blank')
+  }
+
   const certifications = [
-    {
-      icon: '🏆',
-      title: 'AWS Solutions Architect',
-      issuer: 'Amazon Web Services',
-      year: '2023',
-    },
     {
       icon: '☁️',
       title: 'AWS Academy Graduate',
       issuer: 'AWS Academy Cloud Foundations',
-      year: '2023',
+      pdfPath: '/certification/AWS_Academy_Graduate___AWS_Academy_Cloud_Foundations_Badge20241004-7-45q8lw.pdf',
     },
     {
       icon: '🔐',
       title: 'Cybersecurity Essentials',
       issuer: 'Cisco',
-      year: '2022',
+      pdfPath: '/certification/Cybersecurity_Essentials_Badge20241004-7-jndl9r.pdf',
     },
     {
-      icon: '�️',
+      icon: '🛡️',
       title: 'Introduction to Cybersecurity',
       issuer: 'Cisco',
-      year: '2022',
+      pdfPath: '/certification/Introduction_to_Cybersecurity_Badge20241004-7-ro7pzh.pdf',
     },
     {
       icon: '�',
       title: 'Introduction to Android Development',
       issuer: 'Infosys',
-      year: '2022',
+      pdfPath: '/certification/introduction android devel.pdf',
     },
     {
-      icon: '🤖',
+      icon: '🐍',
       title: 'Machine Learning Using Python',
       issuer: 'Infosys',
-      year: '2023',
+      pdfPath: '/certification/machine learning using python.pdf',
     },
     {
-      icon: '⚙️',
-      title: 'Kubernetes Certified',
-      issuer: 'Linux Foundation',
-      year: '2022',
-    },
-    {
-      icon: '☁️',
-      title: 'Google Cloud Professional',
-      issuer: 'Google Cloud',
-      year: '2023',
-    },
-    {
-      icon: '📊',
-      title: 'Data Science Professional',
-      issuer: 'Coursera',
-      year: '2023',
+      icon: '🏪',
+      title: 'Flipkart Grid Participation',
+      issuer: 'Unstop (by Dare2Compete)',
+      pdfPath: '/certification/unstop flipkart.pdf',
     },
   ]
 
@@ -109,7 +164,8 @@ const Footer = () => {
                   key={idx}
                   variants={itemVariants}
                   whileHover={{ y: -5 }}
-                  className="group"
+                  className="group cursor-pointer"
+                  onClick={() => handleCertificationClick(cert.pdfPath)}
                 >
                   <div className="h-full bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-teal-400/20 rounded-lg p-6 hover:border-teal-400/60 transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/10 glass">
                     {/* Icon */}
@@ -118,24 +174,20 @@ const Footer = () => {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-teal-400 transition-colors">
+                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-teal-400 transition-colors">
                       {cert.title}
                     </h3>
 
                     {/* Issuer */}
-                    <p className="text-teal-300 text-sm font-semibold mb-2">
+                    <p className="text-teal-300 text-sm font-semibold mb-3">
                       {cert.issuer}
                     </p>
 
-                    {/* Year */}
-                    <p className="text-gray-400 text-xs">
-                      Issued {cert.year}
-                    </p>
-
-                    {/* Hover Icon */}
-                    <div className="mt-4 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {/* View PDF Button */}
+                    <div className="mt-4 inline-flex items-center gap-2 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity text-sm font-semibold">
+                      <span>View Certificate</span>
                       <svg
-                        className="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                        className="w-4 h-4 group-hover:translate-x-1 transition-transform"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -152,6 +204,137 @@ const Footer = () => {
                 </motion.div>
               ))}
             </div>
+          </motion.div>
+
+          {/* Get In Touch Section */}
+          <motion.div className="mb-16 bg-gradient-to-br from-gray-800/30 to-gray-900/30 border border-teal-400/20 rounded-lg p-8" variants={itemVariants}>
+            <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-center">
+              <span className="bg-gradient-to-r from-teal-400 to-blue-400 bg-clip-text text-transparent">
+                Get In Touch
+              </span>
+            </h2>
+            <p className="text-gray-300 text-center mb-8 max-w-2xl mx-auto">
+              Have a project in mind? Let's work together to create something amazing.
+            </p>
+
+            {/* Contact Form and Call Section */}
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto relative">
+              {/* Contact Form */}
+              <motion.div variants={itemVariants}>
+                <form className="space-y-4" onSubmit={handleFormSubmit}>
+                  <div>
+                    <label className="block text-white font-semibold mb-2">Name</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleFormChange}
+                      placeholder="Your name"
+                      required
+                      className="w-full px-4 py-2 bg-gray-800 border border-teal-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-teal-400 transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-white font-semibold mb-2">Email</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleFormChange}
+                      placeholder="your@email.com"
+                      required
+                      className="w-full px-4 py-2 bg-gray-800 border border-teal-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-teal-400 transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-white font-semibold mb-2">Subject</label>
+                    <input
+                      type="text"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleFormChange}
+                      placeholder="Project inquiry"
+                      required
+                      className="w-full px-4 py-2 bg-gray-800 border border-teal-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-teal-400 transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-white font-semibold mb-2">Message</label>
+                    <textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleFormChange}
+                      placeholder="Tell me about your project..."
+                      rows={4}
+                      required
+                      className="w-full px-4 py-2 bg-gray-800 border border-teal-400/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-teal-400 transition-colors resize-none"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-gradient-to-r from-teal-400 to-blue-400 text-gray-900 font-bold py-3 rounded-lg hover:shadow-lg hover:shadow-teal-500/50 transition-all duration-300 mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {loading ? 'Sending...' : 'Send Message'}
+                  </button>
+                </form>
+              </motion.div>
+
+              {/* Schedule Call Section */}
+              <motion.div 
+                className="flex flex-col justify-between bg-gradient-to-br from-teal-400/10 to-blue-400/10 border border-teal-400/30 rounded-lg p-6"
+                variants={itemVariants}
+              >
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-3">Prefer a quick chat?</h3>
+                  <p className="text-gray-300 mb-6">
+                    Schedule a call with me and let's discuss your project in detail.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => window.open('https://calendly.com/shivpujankumar', '_blank')}
+                  className="bg-gradient-to-r from-teal-400 to-blue-400 text-gray-900 font-bold py-3 px-6 rounded-lg hover:shadow-lg hover:shadow-teal-500/50 transition-all duration-300 self-start"
+                >
+                  Schedule a Call
+                </button>
+              </motion.div>
+            </div>
+
+            {/* Success/Error Notification */}
+            <AnimatePresence>
+              {successMessage && (
+                <motion.div
+                  initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                  className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50"
+                >
+                  <div className="bg-gradient-to-r from-green-500 to-teal-500 text-white px-8 py-4 rounded-lg shadow-lg shadow-green-500/50 font-semibold flex items-center gap-3">
+                    <span className="text-2xl">✅</span>
+                    {successMessage}
+                  </div>
+                </motion.div>
+              )}
+
+              {errorMessage && (
+                <motion.div
+                  initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                  className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50"
+                >
+                  <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-8 py-4 rounded-lg shadow-lg shadow-red-500/50 font-semibold flex items-center gap-3">
+                    <span className="text-2xl">❌</span>
+                    {errorMessage}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
 
           {/* Footer Bottom */}

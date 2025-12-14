@@ -9,7 +9,7 @@ const Contact = () => {
   // Initialize EmailJS - REPLACE WITH YOUR ACTUAL PUBLIC KEY
   // Get it from: emailjs.com → Account → Public Key
   useEffect(() => {
-    emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY_HERE')
+    emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || '0fh290fG-PvuUuzSY')
   }, [])
   const { ref, inView } = useInView({
     threshold: 0.2,
@@ -47,9 +47,9 @@ const Contact = () => {
     try {
       // Validate that credentials are set
       const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'service_v6hj7a8'
-      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'template_oaq3i0u'
+      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'template_rj9mn1r'
 
-      if (serviceId === 'service_v6hj7a8' || templateId === 'template_oaq3i0u') {
+      if (serviceId === 'service_5okqjem' || templateId === 'template_rj9mn1r') {
         console.warn('⚠️ Using placeholder EmailJS credentials. Please update with your actual credentials.')
       }
 
