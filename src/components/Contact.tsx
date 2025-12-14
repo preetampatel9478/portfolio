@@ -6,9 +6,10 @@ import { useInView } from 'react-intersection-observer'
 import emailjs from '@emailjs/browser'
 
 const Contact = () => {
-  // Initialize EmailJS
+  // Initialize EmailJS - REPLACE WITH YOUR ACTUAL PUBLIC KEY
+  // Get it from: emailjs.com → Account → Public Key
   useEffect(() => {
-    emailjs.init('YOUR_PUBLIC_KEY_HERE') // Replace with your public key
+    emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY_HERE')
   }, [])
   const { ref, inView } = useInView({
     threshold: 0.2,
@@ -44,30 +45,54 @@ const Contact = () => {
     setError('')
 
     try {
+      // Validate that credentials are set
+      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'service_v6hj7a8'
+      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'template_oaq3i0u'
+
+      if (serviceId === 'service_v6hj7a8' || templateId === 'template_oaq3i0u') {
+        console.warn('⚠️ Using placeholder EmailJS credentials. Please update with your actual credentials.')
+      }
+
       // Send email using EmailJS
-      await emailjs.send(
-        'service_v6hj7a8', // Your Service ID
-        'template_oaq3i0u', // Your Template ID
+      const response = await emailjs.send(
+        serviceId,
+        templateId,
         {
           to_email: 'shivpujankumar02002@gmail.com',
           from_name: formData.name,
           from_email: formData.email,
           subject: formData.subject,
           message: formData.message,
+          reply_to: formData.email,
         }
       )
 
+      console.log('✅ Email sent successfully:', response)
       setSubmitted(true)
       setFormData({ name: '', email: '', subject: '', message: '' })
       setTimeout(() => {
         setSubmitted(false)
-      }, 3000)
-    } catch (err) {
-      console.error('Error sending email:', err)
-      setError('Failed to send message. Please try again.')
+      }, 4000)
+    } catch (err: any) {
+      console.error('❌ Error sending email:', err)
+      
+      // Provide detailed error messages
+      let errorMessage = 'Failed to send message. Please try again.'
+      
+      if (err.text === 'Unauthorized') {
+        errorMessage = 'Email service not configured. Please check your EmailJS credentials.'
+      } else if (err.status === 0) {
+        errorMessage = 'Network error. Please check your internet connection.'
+      } else if (err.text?.includes('Invalid email address')) {
+        errorMessage = 'Invalid email address. Please check and try again.'
+      }
+      
+      setError(errorMessage)
+      console.error('Error details:', err.text || err.message)
+      
       setTimeout(() => {
         setError('')
-      }, 3000)
+      }, 5000)
     } finally {
       setLoading(false)
     }
