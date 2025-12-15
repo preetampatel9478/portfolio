@@ -8,7 +8,13 @@ import emailjs from '@emailjs/browser'
 const Footer = () => {
   // Initialize EmailJS
   useEffect(() => {
-    emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || '0fh290fG-PvuUuzSY')
+    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+    if (publicKey) {
+      emailjs.init(publicKey)
+      console.log('✓ EmailJS initialized successfully')
+    } else {
+      console.warn('⚠️ EmailJS Public Key not found in environment variables')
+    }
   }, [])
 
   const { ref, inView } = useInView({
@@ -44,22 +50,35 @@ const Footer = () => {
     setErrorMessage('')
 
     try {
-      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'service_v6hj7a8'
-      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'template_oaq3i0u'
+      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
+      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
 
-      await emailjs.send(
-        serviceId,
-        templateId,
-        {
-          to_email: 'shivpujankumar02002@gmail.com',
-          from_name: formData.name,
-          from_email: formData.email,
-          subject: formData.subject,
-          message: formData.message,
-          reply_to: formData.email,
-        }
-      )
+      console.log('📧 EmailJS Configuration:')
+      console.log('Public Key:', publicKey ? '✓ Set' : '✗ Missing')
+      console.log('Service ID:', serviceId ? '✓ Set' : '✗ Missing')
+      console.log('Template ID:', templateId ? '✓ Set' : '✗ Missing')
 
+      if (!publicKey || !serviceId || !templateId) {
+        throw new Error('Missing EmailJS credentials. Please check your .env.local file.')
+      }
+
+      console.log('📤 Sending email with data:', {
+        from_name: formData.name,
+        from_email: formData.email,
+        subject: formData.subject,
+      })
+
+      const response = await emailjs.send(serviceId, templateId, {
+        to_email: 'shivpujankumar02002@gmail.com',
+        from_name: formData.name,
+        from_email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+        reply_to: formData.email,
+      })
+
+      console.log('✅ Email sent successfully:', response)
       setSuccessMessage('✅ Your message sent successfully!')
       setFormData({ name: '', email: '', subject: '', message: '' })
 
@@ -67,12 +86,32 @@ const Footer = () => {
         setSuccessMessage('')
       }, 4000)
     } catch (err: any) {
-      console.error('Error sending email:', err)
-      setErrorMessage('❌ Failed to send message. Please try again.')
+      console.error('❌ Error details:', {
+        message: err.message,
+        status: err.status,
+        text: err.text,
+        fullError: err,
+      })
+
+      let errorMsg = '❌ Failed to send message. Please try again.'
+
+      if (err.message?.includes('Missing EmailJS')) {
+        errorMsg = '❌ EmailJS credentials not configured. Check .env.local file.'
+      } else if (err.text === 'Unauthorized') {
+        errorMsg = '❌ Invalid EmailJS credentials (Unauthorized)'
+      } else if (err.status === 401) {
+        errorMsg = '❌ Authentication failed - Check your public key'
+      } else if (err.status === 400) {
+        errorMsg = '❌ Bad request - Check template or service configuration'
+      } else if (err.message?.includes('Network')) {
+        errorMsg = '❌ Network error - Check your internet connection'
+      }
+
+      setErrorMessage(errorMsg)
 
       setTimeout(() => {
         setErrorMessage('')
-      }, 4000)
+      }, 5000)
     } finally {
       setLoading(false)
     }
@@ -282,26 +321,6 @@ const Footer = () => {
                     {loading ? 'Sending...' : 'Send Message'}
                   </button>
                 </form>
-              </motion.div>
-
-              {/* Schedule Call Section */}
-              <motion.div 
-                className="flex flex-col justify-between bg-gradient-to-br from-teal-400/10 to-blue-400/10 border border-teal-400/30 rounded-lg p-6"
-                variants={itemVariants}
-              >
-                <div>
-                  <h3 className="text-2xl font-bold text-white mb-3">Prefer a quick chat?</h3>
-                  <p className="text-gray-300 mb-6">
-                    Schedule a call with me and let's discuss your project in detail.
-                  </p>
-                </div>
-
-                <button
-                  onClick={() => window.open('https://calendly.com/shivpujankumar', '_blank')}
-                  className="bg-gradient-to-r from-teal-400 to-blue-400 text-gray-900 font-bold py-3 px-6 rounded-lg hover:shadow-lg hover:shadow-teal-500/50 transition-all duration-300 self-start"
-                >
-                  Schedule a Call
-                </button>
               </motion.div>
             </div>
 
