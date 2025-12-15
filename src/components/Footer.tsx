@@ -166,7 +166,7 @@ const Footer = () => {
       pdfPath: '/certification/introduction android devel.pdf',
     },
     {
-      icon: '🐍',
+      icon: '🎯',
       title: 'Machine Learning Using Python',
       issuer: 'Infosys',
       pdfPath: '/certification/machine learning using python.pdf',
