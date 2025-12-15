@@ -246,7 +246,7 @@ const Footer = () => {
           </motion.div>
 
           {/* Get In Touch Section */}
-          <motion.div className="mb-16 bg-gradient-to-br from-gray-800/30 to-gray-900/30 border border-teal-400/20 rounded-lg p-8" variants={itemVariants}>
+          <motion.div id="get-in-touch" className="mb-16 bg-gradient-to-br from-gray-800/30 to-gray-900/30 border border-teal-400/20 rounded-lg p-8" variants={itemVariants}>
             <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-center">
               <span className="bg-gradient-to-r from-teal-400 to-blue-400 bg-clip-text text-transparent">
                 Get In Touch
@@ -361,7 +361,7 @@ const Footer = () => {
             className="border-t border-teal-400/20 pt-8"
             variants={itemVariants}
           >
-            <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div className="grid md:grid-cols-4 gap-8 mb-8">
               {/* About */}
               <div>
                 <h4 className="text-lg font-bold text-white mb-4">About</h4>
@@ -374,11 +374,11 @@ const Footer = () => {
               <div>
                 <h4 className="text-lg font-bold text-white mb-4">Quick Links</h4>
                 <ul className="space-y-2 text-sm">
-                  {['About', 'Projects', 'Startups', 'Resume', 'Contact'].map(
+                  {['About', 'Projects', 'Startups', 'Resume', 'Get In Touch'].map(
                     (link, idx) => (
                       <li key={idx}>
                         <a
-                          href={`#${link.toLowerCase()}`}
+                          href={`#${link.toLowerCase().replace(/\s+/g, '-')}`}
                           className="text-gray-400 hover:text-teal-400 transition-colors"
                         >
                           {link}
@@ -387,6 +387,31 @@ const Footer = () => {
                     )
                   )}
                 </ul>
+              </div>
+
+              {/* Contact Info */}
+              <div>
+                <h4 className="text-lg font-bold text-white mb-4">Contact</h4>
+                <div className="space-y-3 text-sm">
+                  <div>
+                    <p className="text-gray-400">📱 Phone</p>
+                    <a 
+                      href="tel:+918539005062"
+                      className="text-teal-400 hover:text-teal-300 transition-colors font-semibold"
+                    >
+                      +91 853900506
+                    </a>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">✉️ Email</p>
+                    <a 
+                      href="mailto:shivpujankumar02002@gmail.com"
+                      className="text-teal-400 hover:text-teal-300 transition-colors font-semibold break-all"
+                    >
+                      shivpujankumar02002@gmail.com
+                    </a>
+                  </div>
+                </div>
               </div>
 
               {/* Connect */}
@@ -408,6 +433,11 @@ const Footer = () => {
                       icon: '𝕏',
                       link: 'https://twitter.com/Preetam94785232',
                       label: 'Twitter',
+                    },
+                    {
+                      icon: '📷',
+                      link: 'https://instagram.com/preetam_patel9478',
+                      label: 'Instagram',
                     },
                   ].map((social, idx) => (
                     <a

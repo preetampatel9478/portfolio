@@ -13,6 +13,7 @@ const Navbar = () => {
     { label: 'Startups', href: '#startups' },
     { label: 'Certifications', href: '#certifications' },
     { label: 'Resume', href: '#resume' },
+    { label: 'Get In Touch', href: '#get-in-touch' },
   ]
 
   return (
@@ -42,7 +43,7 @@ const Navbar = () => {
 
           {/* CTA Button */}
           <a
-            href="#contact"
+            href="#get-in-touch"
             className="hidden sm:inline-block px-6 py-2 bg-teal-500 text-gray-900 font-semibold rounded-lg hover:bg-teal-400 transition-colors"
           >
             Hire Me
@@ -87,7 +88,7 @@ const Navbar = () => {
               </a>
             ))}
             <a
-              href="#contact"
+              href="#get-in-touch"
               className="block px-3 py-2 bg-teal-500 text-gray-900 font-semibold rounded-lg hover:bg-teal-400 transition-colors"
               onClick={() => setIsOpen(false)}
             >
